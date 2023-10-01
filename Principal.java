@@ -3,7 +3,12 @@ class Principal{
     
     static void AgregarProducto(Producto[] listaP, 
                                 Producto nuevo, int posicion){
-          listaP[posicion] = nuevo;         
+        try {
+            listaP[posicion-1] = nuevo;         
+        } catch (Exception e) {
+            System.out.println("Valor de arreglo no valido");
+
+        }
     }
     
     /**
@@ -42,11 +47,14 @@ class Principal{
         Ventas v = new Ventas();
         
         while (true){
-            System.out.println("Menú");
+            System.out.println();
+            System.out.println("-------------------------");
+            System.out.println("         Menú");
             System.out.println("1. Agregar un producto");
             System.out.println("2. Comprar un producto");
             System.out.println("3. Ver ventas");
             System.out.println("4. Salir");
+            System.out.println("-------------------------");
             
             String opcion = scanner.nextLine();
             
@@ -54,23 +62,28 @@ class Principal{
                 break;
             }
             else if(opcion.equals("1")){
-                Producto n = new Producto();
+                try{
+                    Producto n = new Producto();
 
-                System.out.println("Digite el nombre");
-                n.nombre = scanner.nextLine();
+                    System.out.println("Digite el nombre:");
+                    n.nombre = scanner.nextLine();
 
-                System.out.println("Digite la cantidad");
-                String e = scanner.nextLine();
-                n.cantidad = Integer.parseInt(e);
+                    System.out.println("Digite la cantidad:");
+                    String e = scanner.nextLine();
+                    n.cantidad = Integer.parseInt(e);
 
-                n.codigo = codigoProducto;
+                    n.codigo = codigoProducto;
 
-                AgregarProducto(listaP, n, codigoProducto++);
+                    AgregarProducto(listaP, n, codigoProducto++);
+                } catch(Exception NumberFormatException){
+                    System.out.println("ERROR: Formato no valido");
+                }
                 
             }
             else if(opcion.equals("2")){
 
-                System.out.println("Productos:");
+                System.out.println("-------------------------");
+                System.out.println("       Productos:");
                 for(int i = 0; i < listaP.length; i++){
                     Producto p = listaP[i];
                     if(p == null){
@@ -81,33 +94,104 @@ class Principal{
                                     " - " + p.cantidad;
                     System.out.println(linea);
                 }
+                System.out.println("-------------------------");
 
-                System.out.println("Elija el código de un producto");
-                String e = scanner.nextLine();
-                int codigo = Integer.parseInt(e);
-                
-                System.out.println("Elija la cantidad a comprar");
-                e = scanner.nextLine();
-                int cantidad = Integer.parseInt(e);
-                
-                String nombreProducto = getNombreByCodigo(listaP, codigo);
-                
-                v.RegistrarVenta(String.valueOf(codigo), nombreProducto, cantidad);
-                System.out.println(nombreProducto);
-
-                listaP[codigo-1].Descontar(cantidad);
+                try {
+                    System.out.println("Elija el código de un producto");
+                    String e = scanner.nextLine();
+                    int codigo = Integer.parseInt(e);
+                    
+                    System.out.println("Elija la cantidad a comprar");
+                    e = scanner.nextLine();
+                    int cantidad = Integer.parseInt(e);
+                    if (cantidad < 0) {
+                        System.out.println("Valor no valido");
+                    }else{
+                        
+                        String nombreProducto = getNombreByCodigo(listaP, codigo);
+                        
+                        if(listaP[codigo-1].Descontar(cantidad) == true){
+                            //listaP[codigo-1].Descontar(cantidad);
+                            System.out.println(cantidad +" "+ nombreProducto +" "+ "comprados");
+                            v.RegistrarVenta(String.valueOf(codigo), nombreProducto, cantidad);
+                        }
+                        else{System.out.println("No se pueden comprar mas elementos de los que hay en inventario");}
+                    }
+                } catch (Exception NumberFormatException) {
+                    System.out.println("Valores no validos");
+                }
                 
 
 
             }
             else if (opcion.equals("3")){
 
-                for(int i; i <= v.ventas.length; i++){
-                    
+                System.out.println("-------------------------");
+                for(int i = 0; i < v.ventas.length; i++){
+                    if(v.ventas[i] != null){
+                        System.out.println(v.ventas[i]);
+                    }
                 }
+                System.out.println("-------------------------");
 
             }
+            else{System.out.println("Opcion no valida");}
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*Matrix m = new Matrix();
+        m.LlenarMatriz();
+        m.MostrarMatriz();
+        
+        m.MarcarCasilla(0, 0, 'X');
+        m.MostrarMatriz();
+        
+        m.MarcarCasilla(1, 1, '0');
+        m.MostrarMatriz();
+        
+        m.MarcarCasilla(2, 0, 'X');
+        m.MostrarMatriz();
+        
+        
+        m.MarcarCasilla(1, 0, '0');
+        m.MostrarMatriz();*/        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*Atleta atleta1 = new Atleta();
+        Atleta atleta2 = new Atleta("Enr", "Muñoz");
+        Atleta atleta3 = new Atleta("Pepe", "Pereira");
+        
+        atleta1.setNombre("María");
+        
+        String apellido2 = atleta2.getNombre();
+        
+        
+        int ba = 2;
+        int exp = 3;
+        
+        int potencia = MisMates.CalcularPotencia(ba, exp);
+        
+        System.out.println( atleta1.getNombre() );
+        System.out.println( atleta3.getNombre() );
+        
+        
+        System.out.println( potencia );*/
         
     }
 }

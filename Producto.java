@@ -14,9 +14,12 @@ public class Producto
         cantidad = ca;
     }
     
-    public void Descontar(int cantidadComprada){
+    public boolean Descontar(int cantidadComprada){
         if(cantidad - cantidadComprada >= 0){
             cantidad = cantidad - cantidadComprada;
+            return true;
+        } else{
+            return false;
         }
     }
     
